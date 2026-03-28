@@ -5,30 +5,46 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\ShopController; 
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController; // ← tambah ini
 
 require __DIR__.'/auth.php';
 
-// Home
 Route::get('/', function () {
     return redirect()->route('shop.index');
 });
 
-// =============================================
-// CUSTOMER / SHOP ROUTES (publik)
-// =============================================
+// Shop 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/shop/{product:slug}', [ShopController::class, 'show'])->name('shop.show');
 
-// Placeholder untuk routes yang dibuat nanti
+// Customer 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/cart', function () { return 'Cart coming soon'; })->name('cart.index');
-    Route::get('/orders', function () { return 'Orders coming soon'; })->name('orders.index');
+
+    // Cart
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
+    // Checkout
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    // Orders 
+    Route::get('/orders', function () {
+        return 'Orders coming soon';
+    })->name('orders.index');
+
+    Route::get('/orders/{order}', function () {
+        return 'Order detail coming soon';
+    })->name('orders.show');
+
 });
 
-// =============================================
-// ADMIN ROUTES
-// =============================================
+// Admin
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('categories', CategoryController::class);
