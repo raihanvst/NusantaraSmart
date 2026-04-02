@@ -23,7 +23,7 @@
                 <ul class="space-y-2">
                     <li>
                         <a href="{{ route('shop.index', array_merge(request()->except('category', 'page'), [])) }}"
-                           class="flex items-center text-sm {{ !request('category') ? 'text-green-600 font-semibold' : 'text-gray-600 hover:text-green-600' }}">
+                           class="flex items-center text-sm {{ !request('category') ? 'text-[#3A68AB] font-semibold' : 'text-gray-600 hover:text-green-600' }}">
                             <span class="mr-2">•</span> Semua Produk
                         </a>
                     </li>

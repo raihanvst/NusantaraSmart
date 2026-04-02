@@ -11,12 +11,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Daftarkan alias middleware di sini
         $middleware->alias([
-            'isAdmin' => \App\Http\Middleware\IsAdmin::class,
+            'isAdmin'    => \App\Http\Middleware\IsAdmin::class,
             'isCustomer' => \App\Http\Middleware\IsCustomer::class,
+        ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'webhook/xendit',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
+
+// 
