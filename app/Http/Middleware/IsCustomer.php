@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IsCustomer
 {
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request,    Closure $next): Response
     {
         // Cek apakah user sudah login DAN rolenya adalah customer
         if (!auth()->check() || !auth()->user()->isCustomer()) {

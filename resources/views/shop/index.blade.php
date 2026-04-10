@@ -5,64 +5,80 @@
 
 @section('content')
 
-{{-- Header --}}
-<div class="mb-8">
-    <h1 class="text-2xl font-bold text-gray-800">Katalog Produk</h1>
-    <p class="text-sm text-gray-500 mt-1">Temukan perangkat smart home terbaik untuk rumahmu</p>
+{{-- ===== HERO SECTION dengan Batik Pattern ===== --}}
+<div class="batik-pattern rounded-3xl overflow-hidden mb-10 shadow-xl">
+    <div class="px-8 py-14 md:py-20 text-center">
+        <!-- <span class="inline-block bg-amber-500/20 text-amber-300 text-xs font-semibold px-3 py-1 rounded-full mb-4 border border-amber-500/30">
+            Smart Home Indonesia
+        </span> -->
+        <h1 class="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
+            Rumah Pintar,<br>
+            <span class="text-amber-400">Hidup Lebih Mudah</span>
+        </h1>
+        <p class="text-blue-200 text-sm md:text-base max-w-md mx-auto mb-8">
+            Temukan perangkat smart home terbaik untuk mewujudkan rumah impianmu yang modern dan efisien.
+        </p>
+        <a href="#katalog"
+           class="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-lg hover:shadow-xl">
+            Lihat Katalog
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </a>
+    </div>
 </div>
 
-<div class="flex flex-col lg:flex-row gap-8">
+{{-- ===== KATEGORI PILLS ===== --}}
+<div class="flex items-center gap-2 overflow-x-auto pb-2 mb-8 scrollbar-hide">
+    <a href="{{ route('shop.index') }}"
+       class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all
+              {{ !request('category') ? 'bg-[#0f1f5c] text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:border-[#0f1f5c] hover:text-[#0f1f5c]' }}">
+        Semua
+    </a>
+    @foreach($categories as $cat)
+    <a href="{{ route('shop.index', array_merge(request()->except('category', 'page'), ['category' => $cat->id])) }}"
+       class="flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all
+              {{ request('category') == $cat->id ? 'bg-[#0f1f5c] text-white shadow-sm' : 'bg-white text-slate-600 border border-slate-200 hover:border-[#0f1f5c] hover:text-[#0f1f5c]' }}">
+        {{ $cat->name }}
+    </a>
+    @endforeach
+</div>
 
-    {{-- SIDEBAR FILTER (kiri) --}}
+{{-- ===== MAIN CONTENT ===== --}}
+<div id="katalog" class="flex flex-col lg:flex-row gap-8">
+
+    {{-- SIDEBAR FILTER --}}
     <aside class="w-full lg:w-56 flex-shrink-0">
-        <form action="{{ route('shop.index') }}" method="GET" id="filterForm">
+        <form action="{{ route('shop.index') }}" method="GET">
 
-            {{-- Filter Kategori --}}
-            <div class="bg-white rounded-2xl border border-gray-200 p-5 mb-4">
-                <h3 class="text-sm font-semibold text-gray-700 mb-3">Kategori</h3>
-                <ul class="space-y-2">
-                    <li>
-                        <a href="{{ route('shop.index', array_merge(request()->except('category', 'page'), [])) }}"
-                           class="flex items-center text-sm {{ !request('category') ? 'text-[#3A68AB] font-semibold' : 'text-gray-600 hover:text-green-600' }}">
-                            <span class="mr-2">•</span> Semua Produk
-                        </a>
-                    </li>
-                    @foreach($categories as $cat)
-                    <li>
-                        <a href="{{ route('shop.index', array_merge(request()->except('category', 'page'), ['category' => $cat->id])) }}"
-                           class="flex items-center text-sm {{ request('category') == $cat->id ? 'text-green-600 font-semibold' : 'text-gray-600 hover:text-green-600' }}">
-                            <span class="mr-2">•</span> {{ $cat->name }}
-                        </a>
-                    </li>
-                    @endforeach
-                </ul>
-            </div>
-
-            {{-- Filter Harga --}}
-            <div class="bg-white rounded-2xl border border-gray-200 p-5">
-                <h3 class="text-sm font-semibold text-gray-700 mb-3">Rentang Harga</h3>
+            <div class="card p-5 mb-4">
+                <h3 class="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-[#0f1f5c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/>
+                    </svg>
+                    Filter Harga
+                </h3>
                 <div class="space-y-3">
                     <div>
-                        <label class="text-xs text-gray-400 mb-1 block">Harga Minimum</label>
+                        <label class="text-xs text-slate-400 mb-1 block">Harga Minimum</label>
                         <input type="number" name="min_price"
                                value="{{ request('min_price') }}"
                                placeholder="0"
-                               class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-300">
+                               class="input-field text-sm">
                     </div>
                     <div>
-                        <label class="text-xs text-gray-400 mb-1 block">Harga Maksimum</label>
+                        <label class="text-xs text-slate-400 mb-1 block">Harga Maksimum</label>
                         <input type="number" name="max_price"
                                value="{{ request('max_price') }}"
                                placeholder="9999999"
-                               class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-300">
+                               class="input-field text-sm">
                     </div>
-                    <button type="submit"
-                            class="w-full text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-sm px-4 py-2">
-                        Terapkan Filter
+                    <button type="submit" class="btn-primary w-full text-sm text-center">
+                        Terapkan
                     </button>
                     @if(request()->hasAny(['min_price', 'max_price', 'category', 'search']))
                         <a href="{{ route('shop.index') }}"
-                           class="block text-center text-xs text-gray-400 hover:text-red-500 hover:underline">
+                           class="block text-center text-xs text-slate-400 hover:text-red-500 transition-colors">
                             Reset filter
                         </a>
                     @endif
@@ -72,17 +88,14 @@
         </form>
     </aside>
 
-    {{-- PRODUK GRID (kanan) --}}
+    {{-- PRODUK GRID --}}
     <div class="flex-1">
 
-        {{-- Info hasil pencarian --}}
-        <div class="flex items-center justify-between mb-4">
-            <p class="text-sm text-gray-500">
-                Menampilkan
-                <span class="font-semibold text-gray-700">{{ $products->total() }}</span>
-                produk
+        <div class="flex items-center justify-between mb-5">
+            <p class="text-sm text-slate-500">
+                Menampilkan <span class="font-semibold text-slate-700">{{ $products->total() }}</span> produk
                 @if(request('search'))
-                    untuk "<span class="font-semibold">{{ request('search') }}</span>"
+                    untuk "<span class="font-semibold text-[#0f1f5c]">{{ request('search') }}</span>"
                 @endif
             </p>
         </div>
@@ -92,51 +105,49 @@
         {{-- Grid 3 Kolom --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             @foreach($products as $product)
-
-            {{-- ============================================================
-                 PRODUCT CARD
-                 Sumber: https://flowbite.com/docs/components/card/
-                 ============================================================ --}}
-            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden group">
+            <div class="card overflow-hidden group">
 
                 {{-- Gambar --}}
                 <a href="{{ route('shop.show', $product) }}">
-                    <div class="aspect-square overflow-hidden bg-gray-100">
+                    <div class="aspect-square overflow-hidden bg-slate-100 relative">
                         @if($product->image)
                             <img src="{{ Storage::url($product->image) }}"
                                  alt="{{ $product->name }}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         @else
-                            <div class="w-full h-full flex items-center justify-center text-gray-300">
-                                <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                                          d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                            <div class="w-full h-full flex items-center justify-center">
+                                <svg class="w-16 h-16 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                                 </svg>
                             </div>
                         @endif
+                        {{-- Badge Kategori --}}
+                        <div class="absolute top-3 left-3">
+                            <span class="bg-[#0f1f5c]/80 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1 rounded-full">
+                                {{ $product->category->name }}
+                            </span>
+                        </div>
                     </div>
                 </a>
 
-                {{-- Info Produk --}}
+                {{-- Info --}}
                 <div class="p-4">
-                    <span class="text-xs text-green-600 font-medium">{{ $product->category->name }}</span>
                     <a href="{{ route('shop.show', $product) }}">
-                        <h3 class="text-sm font-semibold text-gray-800 mt-1 mb-2 hover:text-green-600 transition-colors line-clamp-2">
+                        <h3 class="text-sm font-semibold text-slate-800 mb-1 hover:text-[#0f1f5c] transition-colors line-clamp-2 leading-snug">
                             {{ $product->name }}
                         </h3>
                     </a>
-                    <div class="flex items-center justify-between mt-3">
-                        <div>
-                            <p class="text-base font-bold text-gray-900">
-                                Rp {{ number_format($product->price, 0, ',', '.') }}
-                            </p>
-                            @if($product->stock <= 0)
-                                <p class="text-xs text-red-500 font-medium">Stok habis</p>
-                            @else
-                                <p class="text-xs text-gray-400">Stok: {{ $product->stock }}</p>
-                            @endif
-                        </div>
-                        {{-- Tombol Tambah ke Cart --}}
+                    <p class="text-lg font-bold text-[#0f1f5c] mb-3">
+                        Rp {{ number_format($product->price, 0, ',', '.') }}
+                    </p>
+
+                    <div class="flex items-center justify-between">
+                        @if($product->stock <= 0)
+                            <span class="text-xs text-red-500 font-medium">Stok habis</span>
+                        @else
+                            <span class="text-xs text-slate-400">Stok: {{ $product->stock }}</span>
+                        @endif
+
                         @if($product->stock > 0)
                             @auth
                                 <form action="{{ route('cart.add') }}" method="POST">
@@ -144,29 +155,23 @@
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                                     <input type="hidden" name="quantity" value="1">
                                     <button type="submit"
-                                            class="p-2.5 text-white bg-green-600 hover:bg-green-700 rounded-xl transition-colors">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                            class="flex items-center gap-1.5 bg-[#0f1f5c] hover:bg-[#1e3a8a] text-white text-xs font-semibold px-3 py-2 rounded-xl transition-all">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
                                         </svg>
+                                        + Keranjang
                                     </button>
                                 </form>
                             @else
                                 <a href="{{ route('login') }}"
-                                   class="p-2.5 text-white bg-green-600 hover:bg-green-700 rounded-xl transition-colors">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                    </svg>
+                                   class="flex items-center gap-1.5 bg-[#0f1f5c] hover:bg-[#1e3a8a] text-white text-xs font-semibold px-3 py-2 rounded-xl transition-all">
+                                    + Keranjang
                                 </a>
                             @endauth
                         @else
                             <button disabled
-                                    class="p-2.5 text-gray-400 bg-gray-100 rounded-xl cursor-not-allowed">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                                </svg>
+                                    class="text-xs font-semibold px-3 py-2 rounded-xl bg-slate-100 text-slate-400 cursor-not-allowed">
+                                Habis
                             </button>
                         @endif
                     </div>
@@ -182,16 +187,15 @@
         </div>
 
         @else
-        {{-- Empty State --}}
-        <div class="flex flex-col items-center justify-center py-20 text-center">
-            <svg class="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <h3 class="text-base font-semibold text-gray-600 mb-1">Produk tidak ditemukan</h3>
-            <p class="text-sm text-gray-400 mb-4">Coba ubah filter atau kata kunci pencarian</p>
-            <a href="{{ route('shop.index') }}"
-               class="text-sm text-green-600 hover:underline">Lihat semua produk</a>
+        <div class="flex flex-col items-center justify-center py-24 text-center">
+            <div class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-5">
+                <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h3 class="text-base font-semibold text-slate-600 mb-1">Produk tidak ditemukan</h3>
+            <p class="text-sm text-slate-400 mb-4">Coba ubah filter atau kata kunci pencarian</p>
+            <a href="{{ route('shop.index') }}" class="btn-primary text-sm">Lihat Semua Produk</a>
         </div>
         @endif
 
