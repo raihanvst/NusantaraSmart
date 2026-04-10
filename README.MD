@@ -263,14 +263,15 @@ Akses di browser: `http://127.0.0.1:8000`
 
 ---
 
+
 ## 💳 Konfigurasi Xendit
 
 **1. Daftar akun di** https://dashboard.xendit.co
 
 **2. Tambahkan konfigurasi di `.env`**
 ```env
-XENDIT_SECRET_KEY=xnd_development_xxxxxxxxxxxxxx
-XENDIT_WEBHOOK_TOKEN=xxxxxxxxxxxxxx
+XENDIT_SECRET_KEY=xnd_development_g5UGELGagv7lmgIGvjK1oEgfrjdzX0WzeMtfFGhfPtBGpYfHNUfcC3MSSHsO
+XENDIT_WEBHOOK_TOKEN=CZDeEDRWkQvDJ3bB7I5Du7vMd2NTJYQLvFuluZCOuN6KNJf2
 APP_URL=https://your-ngrok-url.ngrok-free.dev
 ```
 
